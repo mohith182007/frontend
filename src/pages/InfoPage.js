@@ -42,15 +42,19 @@ function InfoPage({ onUserCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
-    
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     setLoading(true);
+    // Ensure age is sent as a number
+    const payload = {
+      ...formData,
+      age: Number(formData.age)
+    };
     try {
-      const result = await submitUserInfo(formData);
+      const result = await submitUserInfo(payload);
       onUserCreated(result.userId);
       navigate('/questions');
     } catch (error) {
